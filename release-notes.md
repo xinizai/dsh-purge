@@ -1,3 +1,41 @@
+# 1.1.42
+
+## 中文
+
+- 版本升级到 1.1.42。
+- 清洗页提示词下面可以登记自己的服务器：每行一个 IP 或完整主机名，点保存名单。说明里写了步骤，并附了截图。
+- 新对话把提示词放在系统提示最前。面板改为白墨玻璃，两种主题都能看清字。
+- 补丁进度只计已应用的项。网页身份那条在后一条改写句子之后，仍显示已应用。
+- 补上 0.1.x 的入口针。已经打过的 0.2.0 不会被重写。
+
+## English
+
+- Version 1.1.42.
+- Under Prompt on the Clean page, register your own server: one IP or exact hostname per line, then Save list. The docs include the steps and a screenshot.
+- New chats place the prompt at the front of the system prompt. The dock is frosted glass, and both the light and ink themes stay readable.
+- The patch count includes only applied items. The web-surface identity row stays applied after the later sentence rewrite.
+- Needles for 0.1.x entry points were added. An already patched 0.2.0 host is not rewritten.
+
+# 1.1.41
+
+## 中文
+
+- 版本升级到 1.1.41。
+- 官方模式只注入当前提示词；启用规则集后以规则集为主。红队再附上红队操作要求。
+- 回退留在当前会话：先选回退一次或上一轮，上一句放回输入框，并清掉已经发出去的内容。
+- 宿主没清洗完，或没有可注入的提示词时，不重启。
+- 默认已是完全权限时，新会话不再被钉回受限权限。官方模型的 Session Log 上传默认关闭。
+- 目标地址落在中国大陆、香港、澳门时停止。
+
+## English
+
+- Version 1.1.41.
+- Official modes inject the editable prompt, or the active rule set when one is enabled. Red team also keeps its operating section.
+- Rewind stays on the current session: choose one step or the last round, return the last line to the composer, and clear what was already sent.
+- Restart is cancelled unless the host is cleaned and inject text is present.
+- A full-access default is no longer pinned back to a restricted preset. Official model Session Log upload is off by default.
+- Targets whose addresses fall in mainland China, Hong Kong, or Macau are stopped.
+
 # 1.1.40
 
 ## 中文

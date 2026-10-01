@@ -174,7 +174,13 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"theme.ink": "墨",
 			"purge.title": "补丁",
 			"override.title": "提示词",
-			"metric.purged": "补丁",
+			"own.title": "自己的服务器",
+			"own.hint": "每行一个 IP 或完整主机名。可以写成 账号@主机，账号只用来认出这种写法。主机名会连同它当时解析出的地址一起放行。不要写密钥、密码、网段。",
+			"own.save": "保存名单",
+			"saved.own": "已保存自己的服务器",
+			"saved.own.dropped": "已保存。有 {n} 行不是单个 IP 或主机名，已丢掉",
+			"metric.purged": "已应用",
+			"metric.purged.skip": "已应用，另有 {n} 项跳过",
 			"metric.shim": "shim",
 			"metric.bak.yes": "有备份",
 			"metric.bak.no": "无备份",
@@ -189,7 +195,7 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"warn.noRoot.desktop": "官方客户端的代码在 app.asar 里。点「应用」会解开并自动重启，不用另跑脚本。第三方 DSH Desktop 直接点「应用」。",
 			"unpack.restarting": "补丁已写入。点「重启」后客户端会自己重新打开。",
 			"restart.fullQuit": "正在重启，客户端会自己重新打开。",
-			"warn.noInject": "提示词优先；为空则注入当前启用的规则集。两边都空会提示必须添加。Skill 不顶替提示词。",
+			"warn.noInject": "默认只注入可编辑提示词。启用规则集后以规则集为主。两边都空会提示必须添加。Skill 不顶替提示词。",
 			"need.prompt": "提示词和规则集都是空的，必须先添加提示词，或启用一条有内容的规则集。",
 			"btn.restoreInject": "恢复默认",
 			"saved.restoreInject": "已填入默认提示词，点保存写入",
@@ -304,6 +310,7 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"restart.fail": "失败: {error}",
 			"restart.confirm": "清洗已完成，重启后生效。",
 			"restart.confirm.desktop": "清洗已完成，重启桌面应用后生效。",
+			"restart.asarSwap": "补丁已写入磁盘。正在结束桌面进程并挪开 app.asar，完成后会自动重新打开；若仍无效，请先完全退出 Harness（托盘也关），再点一次应用。",
 			"surface.web": "Web",
 			"surface.desktop": "桌面端",
 			"surface.gui": "GUI",
@@ -362,9 +369,9 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"rewind.empty": "没有可回退的上一句",
 			"rewind.fail": "回退失败: {error}",
 			"rewind.once": "回退一次",
-			"rewind.once.hint": "只退当前对话上一句",
+			"rewind.once.hint": "把上一句放回输入框，并清掉已经发出去的内容",
 			"rewind.round": "回退上一轮",
-			"rewind.round.hint": "退回上一轮主对话，本轮子代理一并去掉",
+			"rewind.round.hint": "把上一轮放回输入框，并清掉已经发出去的内容",
 			"continue.title": "失败重试 / 继续",
 			"continue.hint": "请求失败会自动重试；异常停止或中断可点「继续」或自动续跑。自己点停止不会自动继续。次数用完后需新开一轮。",
 			"continue.autoRetry": "失败自动重试",
@@ -419,7 +426,13 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"theme.ink": "Ink",
 			"purge.title": "Patches",
 			"override.title": "Prompt",
-			"metric.purged": "Patches",
+			"own.title": "Own servers",
+			"own.hint": "One IP or exact hostname per line. account@host is accepted; the account only identifies that host. A hostname also allows the addresses it resolves to. Do not enter a key, a password, or a range.",
+			"own.save": "Save list",
+			"saved.own": "Own servers saved",
+			"saved.own.dropped": "Saved. {n} lines were not a single IP or hostname and were dropped",
+			"metric.purged": "Applied",
+			"metric.purged.skip": "Applied, {n} skipped",
 			"metric.shim": "shim",
 			"metric.bak.yes": "Backup",
 			"metric.bak.no": "No backup",
@@ -434,7 +447,7 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"warn.noRoot.desktop": "Official Harness keeps its code in app.asar. Apply unpacks it and restarts the app. Third-party DSH Desktop: just Apply.",
 			"unpack.restarting": "Patches are written. Click Restart and the client opens again by itself.",
 			"restart.fullQuit": "Restarting. The client will open again by itself.",
-			"warn.noInject": "The prompt box wins. If it is empty, the enabled rule set is injected. If both are empty you will be asked to add a prompt. Skills do not replace the prompt.",
+			"warn.noInject": "By default only the editable prompt is injected. An enabled rule set takes over. If both are empty you will be asked to add a prompt. Skills do not replace the prompt.",
 			"need.prompt": "Both the prompt and the rule set are empty. Add a prompt, or enable a rule that has content.",
 			"btn.restoreInject": "Reset default",
 			"saved.restoreInject": "Default prompt loaded. Save to write.",
@@ -549,6 +562,7 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"restart.fail": "Failed: {error}",
 			"restart.confirm": "Apply finished. Restart to take effect.",
 			"restart.confirm.desktop": "Apply finished. Restart the desktop app to take effect.",
+			"restart.asarSwap": "Patches are on disk. Quitting the desktop app and moving app.asar aside; it will reopen when done. If behavior is unchanged, fully quit Harness (including tray) and Apply again.",
 			"surface.web": "Web",
 			"surface.desktop": "Desktop",
 			"surface.gui": "GUI",
@@ -607,9 +621,9 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"rewind.empty": "Nothing to undo",
 			"rewind.fail": "Undo failed: {error}",
 			"rewind.once": "Undo once",
-			"rewind.once.hint": "Drop the last turn of this chat",
+			"rewind.once.hint": "Put the last line back in the box and drop what was already sent",
 			"rewind.round": "Undo last round",
-			"rewind.round.hint": "Back to the previous main turn, including this round's subagents",
+			"rewind.round.hint": "Put the last round back in the box and drop what was already sent",
 			"continue.title": "Retry / Continue",
 			"continue.hint": "Failed requests auto-retry. After an abnormal stop or interrupt, use Continue or auto-resume. A manual stop never auto-continues. Counts reset after a completed turn.",
 			"continue.autoRetry": "Auto-retry on failure",
@@ -751,12 +765,12 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 .dshp-dock-body .dshp-root[data-theme="white"]{--dshp-ink:#1a1916;--dshp-mute:#534e46;--dshp-ok:#1f5c38;--dshp-warn:#8a5a12;--dshp-bad:#9a3434;--dshp-paper:#fffcf7;--dshp-fill:#ebe7df;--dshp-line:#d0caba;--dshp-accent:#3f6b52;--dshp-accent-soft:#d7e6dc;--dshp-bg:#f4f2ec}
 .dshp-dock-body .dshp-root[data-theme="dusk"]{--dshp-ink:#f4f1ea;--dshp-mute:#c9c3b8;--dshp-ok:#9fd0ad;--dshp-warn:#e0c08a;--dshp-bad:#e0b0b0;--dshp-paper:#32312d;--dshp-fill:#353430;--dshp-line:#4a4740;--dshp-accent:#9bb5a6;--dshp-accent-soft:#3a433d;--dshp-bg:#2a2926}
 .dshp-dock-body .dshp-panel,.dshp-dock-body .dshp-metric,.dshp-dock-body .dshp-group,.dshp-dock-body .dshp-editor,.dshp-dock-body .dshp-active,.dshp-dock-body .dshp-ask,.dshp-dock-body .dshp-create,.dshp-dock-body .dshp-switch{background:color-mix(in srgb,var(--dshp-ink) 6%,transparent)!important;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.dshp-dock-body .dshp-root[data-theme="white"] .dshp-panel,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-metric,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-group,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-editor,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-active,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-ask,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-create,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-switch,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-rulelist,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-table,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-ruleitem{background:#fffcf7!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;border-color:#d0caba!important;color:#1a1916!important}
-.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-panel,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-metric,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-group,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-editor,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-active,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-ask,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-create,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-switch,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-rulelist,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-table,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-ruleitem{background:#32312d!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;border-color:#4a4740!important;color:#f4f1ea!important}
+.dshp-dock-body .dshp-root[data-theme="white"] .dshp-panel,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-metric,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-group,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-editor,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-active,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-ask,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-create,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-switch,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-rulelist,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-table,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-ruleitem{background:color-mix(in srgb,#fffdf8 76%,transparent)!important;backdrop-filter:blur(16px) saturate(1.2)!important;-webkit-backdrop-filter:blur(16px) saturate(1.2)!important;border-color:#d0caba!important;color:#1a1916!important}
+.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-panel,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-metric,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-group,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-editor,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-active,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-ask,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-create,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-switch,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-rulelist,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-table,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-ruleitem{background:color-mix(in srgb,#161513 70%,transparent)!important;backdrop-filter:blur(16px) saturate(1.2)!important;-webkit-backdrop-filter:blur(16px) saturate(1.2)!important;border-color:#4a4740!important;color:#f4f1ea!important}
 .dshp-dock-body .dshp-field,.dshp-dock-body .dshp-area{background:color-mix(in srgb,var(--dshp-ink) 8%,transparent);color:var(--dshp-ink);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.dshp-dock-body .dshp-root[data-theme="white"] .dshp-field,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-area{background:#fff!important;color:#1a1916!important;border-color:#c8c2b6!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
-.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-field,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-area{background:#2a2926!important;color:#f4f1ea!important;border-color:#4a4740!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
-.dshp-dock-body select.dshp-field,.dshp-dock-body .dshp-field.dshp-ver{background:var(--dshp-paper,#2a2926)!important;color:var(--dshp-ink)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;color-scheme:dark}
+.dshp-dock-body .dshp-root[data-theme="white"] .dshp-field,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-area{background:color-mix(in srgb,#fff 84%,transparent)!important;color:#16140f!important;border-color:#b7b0a3!important;backdrop-filter:blur(16px) saturate(1.2)!important;-webkit-backdrop-filter:blur(16px) saturate(1.2)!important}
+.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-field,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-area{background:color-mix(in srgb,#0e0d0c 80%,transparent)!important;color:#f7f4ee!important;border-color:color-mix(in srgb,#fff 28%,transparent)!important;backdrop-filter:blur(16px) saturate(1.2)!important;-webkit-backdrop-filter:blur(16px) saturate(1.2)!important}
+.dshp-dock-body select.dshp-field,.dshp-dock-body .dshp-field.dshp-ver{background:var(--dshp-paper,#2a2926)!important;color:var(--dshp-ink)!important;backdrop-filter:blur(16px) saturate(1.2)!important;-webkit-backdrop-filter:blur(16px) saturate(1.2)!important;color-scheme:dark}
 .dshp-dock-body .dshp-root[data-theme="white"] select.dshp-field,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-field.dshp-ver{background:#fff!important;color:#1a1916!important;color-scheme:light}
 .dshp-dock-body .dshp-root[data-theme="dusk"] select.dshp-field,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-field.dshp-ver{background:#32312d!important;color:#e6e2db!important;color-scheme:dark}
 .dshp-dock-body select.dshp-field option,.dshp-dock-body .dshp-field.dshp-ver option{background:#fff;color:#1a1916}
@@ -785,32 +799,32 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 .dshp-dock-body .rt-eng-select option,.dshp-dock-body .rt-input option{background:#1c1c1c;color:#f2f2f2}
 .dshp-dock-body .rt-err{color:#ffb4b4!important;font-weight:600}
 .dshp-dock-body .rt-rep-http,.dshp-dock-body pre{background:color-mix(in srgb,#000 55%,transparent)!important;color:var(--rt-ink)!important;border:1px solid var(--rt-line)}
-/* 宿主浅色 / 白主题：实底、高对比、少眩光（避免半透明白+浅灰字） */
-body:not([data-ds-dark-theme]) .dshp-dock{background:#f3f0e8!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;border:1px solid #c9c3b6!important;box-shadow:0 14px 36px rgba(26,25,22,.18),0 0 0 1px rgba(26,25,22,.06)!important;color:#1a1916!important}
-body:not([data-ds-dark-theme]) .dshp-dock-head,body:not([data-ds-dark-theme]) .dshp-dock-tabs{background:#ebe7df!important;border-bottom-color:#c9c3b6!important;color:#1a1916!important}
-body:not([data-ds-dark-theme]) .dshp-dock-head b,body:not([data-ds-dark-theme]) .dshp-dock-head button{color:#1a1916!important;text-shadow:none!important}
-body:not([data-ds-dark-theme]) .dshp-dock-head button{background:#fffcf7!important;border-color:#c9c3b6!important}
-body:not([data-ds-dark-theme]) .dshp-dock-tab{color:#5c574e!important;text-shadow:none!important}
-body:not([data-ds-dark-theme]) .dshp-dock-tab:hover,body:not([data-ds-dark-theme]) .dshp-dock-tab.on{color:#1a1916!important}
-body:not([data-ds-dark-theme]) .dshp-dock-body{background:#f3f0e8!important}
-body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-root{background:#f3f0e8!important;--dshp-bg:#f3f0e8;--dshp-paper:#fffcf7;--dshp-fill:#ebe7df;--dshp-ink:#1a1916;--dshp-mute:#534e46;--dshp-line:#c9c3b6;--dshp-accent:#3f6b52;--dshp-accent-soft:#d7e6dc}
-body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-panel,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-metric,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-group,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-editor,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-active,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-ask,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-create,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-switch,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-rulelist{background:#fffcf7!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;border-color:#c9c3b6!important;color:#1a1916!important}
-body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-field,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-area,body:not([data-ds-dark-theme]) .dshp-dock-body select.dshp-field,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-field.dshp-ver{background:#fff!important;color:#1a1916!important;border-color:#bdb6a8!important;backdrop-filter:none!important;color-scheme:light}
-body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-title,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-sub h4,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-group-h strong,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-metric b,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-btn,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-rule-name{color:#1a1916!important}
-body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-mute,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-kicker,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-metric span,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-group-h em,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-count,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-rule-meta,body:not([data-ds-dark-theme]) .dshp-dock-body .dshp-hint{color:#534e46!important}
-body:not([data-ds-dark-theme]) .dshp-dock-body .rt-dock{--rt-ink:#1a1916;--rt-mute:#4f4a42;--rt-surf:#fffcf7;--rt-surf-2:#ebe7df;--rt-line:#c9c3b6;color:#1a1916!important;background:#f3f0e8!important}
-body:not([data-ds-dark-theme]) .dshp-dock-body .rt-embedded>.rt-head,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-tabs,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-foot{background:#ebe7df!important;border-color:#c9c3b6!important;color:#1a1916!important}
-body:not([data-ds-dark-theme]) .dshp-dock-body .rt-body{background:#f3f0e8!important;color:#1a1916!important}
-body:not([data-ds-dark-theme]) .dshp-dock-body .rt-card,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-pane,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-side,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-main,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-list,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-toolbar,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-evi,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-live-body,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-chain,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-split,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-table{background:#fffcf7!important;color:#1a1916!important;border:1px solid #c9c3b6!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
-body:not([data-ds-dark-theme]) .dshp-dock-body .rt-title,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-card h4,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-item-name,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-tab.on,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-kv b,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-mono,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-row,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-item,body:not([data-ds-dark-theme]) .dshp-dock-body h4,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-link,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-toolbar>span{text-shadow:none!important;color:#1a1916!important}
-body:not([data-ds-dark-theme]) .dshp-dock-body .rt-tab,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-foot,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-empty,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-item-desc,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-kb-sub,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-kv span,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-tag,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-sec-sub{color:#4f4a42!important;opacity:1!important}
-body:not([data-ds-dark-theme]) .dshp-dock-body .rt-row.head,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-vrow.head,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-score-row.head,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-table thead{background:#ebe7df!important;color:#4f4a42!important}
-body:not([data-ds-dark-theme]) .dshp-dock-body .rt-row:hover,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-item:hover,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-item.on,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-seg:hover,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-seg.on{background:#ebe7df!important}
-body:not([data-ds-dark-theme]) .dshp-dock-body .rt-btn,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-input,body:not([data-ds-dark-theme]) .dshp-dock-body textarea.rt-input,body:not([data-ds-dark-theme]) .dshp-dock-body select.rt-input,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-eng-select{background:#fff!important;color:#1a1916!important;border:1px solid #bdb6a8!important}
-body:not([data-ds-dark-theme]) .dshp-dock-body .rt-eng-select option,body:not([data-ds-dark-theme]) .dshp-dock-body .rt-input option{background:#fff;color:#1a1916}
-body:not([data-ds-dark-theme]) .dshp-dock-body .rt-err{color:#9a3434!important}
-body:not([data-ds-dark-theme]) .dshp-dock-body .rt-btn-primary{background:#3f6b52!important;border-color:#3f6b52!important;color:#fff!important}
-body:not([data-ds-dark-theme]) .dshp-dock-body .rt-rep-http,body:not([data-ds-dark-theme]) .dshp-dock-body pre{background:#ebe7df!important;color:#1a1916!important;border:1px solid #c9c3b6!important}
+/* 白玻璃：深色字压在偏白的半透明底上，宿主深浅都不能把它刷回实底。 */
+body .dshp-dock:has(.dshp-root[data-theme="white"]){background:color-mix(in srgb,#fffdf8 78%,transparent)!important;backdrop-filter:blur(18px) saturate(1.25)!important;-webkit-backdrop-filter:blur(18px) saturate(1.25)!important;border:1px solid color-mix(in srgb,#3c362e 32%,transparent)!important;box-shadow:0 14px 36px rgba(26,25,22,.16)!important;color:#14120e!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-head,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-tabs{background:color-mix(in srgb,#fffdf8 58%,transparent)!important;border-bottom-color:color-mix(in srgb,#3c362e 28%,transparent)!important;color:#14120e!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-head b,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-head button{color:#14120e!important;text-shadow:0 1px 0 rgba(255,255,255,.45)!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-head button{background:color-mix(in srgb,#fff 82%,transparent)!important;border-color:color-mix(in srgb,#3c362e 28%,transparent)!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-tab{color:#3c362e!important;text-shadow:none!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-tab:hover,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-tab.on{color:#14120e!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body{background:transparent!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-root{background:transparent!important;--dshp-bg:transparent;--dshp-paper:color-mix(in srgb,#fffdf8 72%,transparent);--dshp-fill:color-mix(in srgb,#14120e 8%,transparent);--dshp-ink:#14120e;--dshp-mute:#3c362e;--dshp-line:color-mix(in srgb,#3c362e 28%,transparent);--dshp-accent:#2f5a42;--dshp-accent-soft:color-mix(in srgb,#d7e6dc 70%,transparent)}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-panel,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-metric,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-group,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-editor,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-active,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-ask,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-create,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-switch,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-rulelist{background:color-mix(in srgb,#fffdf8 70%,transparent)!important;backdrop-filter:blur(14px) saturate(1.2)!important;-webkit-backdrop-filter:blur(14px) saturate(1.2)!important;border-color:color-mix(in srgb,#3c362e 26%,transparent)!important;color:#14120e!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-field,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-area{background:color-mix(in srgb,#fff 88%,transparent)!important;color:#14120e!important;border-color:color-mix(in srgb,#3c362e 34%,transparent)!important;backdrop-filter:blur(12px)!important;-webkit-backdrop-filter:blur(12px)!important;color-scheme:light}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-title,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-sub h4,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-group-h strong,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-metric b,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-btn,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-rule-name{color:#14120e!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-mute,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-kicker,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-metric span,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-group-h em,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-count,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-rule-meta,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .dshp-hint{color:#3c362e!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-dock{--rt-ink:#14120e;--rt-mute:#3c362e;--rt-surf:color-mix(in srgb,#fffdf8 70%,transparent);--rt-surf-2:color-mix(in srgb,#fffdf8 82%,transparent);--rt-line:color-mix(in srgb,#3c362e 28%,transparent);color:#14120e!important;background:transparent!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-embedded>.rt-head,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-tabs,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-foot{background:color-mix(in srgb,#fffdf8 62%,transparent)!important;border-color:color-mix(in srgb,#3c362e 26%,transparent)!important;color:#14120e!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-body{background:transparent!important;color:#14120e!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-card,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-pane,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-side,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-main,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-list,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-toolbar,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-evi,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-live-body,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-chain,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-split,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-table{background:color-mix(in srgb,#fffdf8 68%,transparent)!important;color:#14120e!important;border:1px solid color-mix(in srgb,#3c362e 26%,transparent)!important;backdrop-filter:blur(14px) saturate(1.2)!important;-webkit-backdrop-filter:blur(14px) saturate(1.2)!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-title,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-card h4,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-item-name,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-tab.on,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-kv b,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-mono,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-row,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-item,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body h4,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-link,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-toolbar>span{text-shadow:none!important;color:#14120e!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-tab,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-foot,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-empty,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-item-desc,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-kb-sub,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-kv span,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-tag,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-sec-sub{color:#3c362e!important;opacity:1!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-row.head,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-vrow.head,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-score-row.head,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-table thead{background:color-mix(in srgb,#fff 80%,transparent)!important;color:#3c362e!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-row:hover,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-item:hover,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-item.on,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-seg:hover,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-seg.on{background:color-mix(in srgb,#fff 74%,transparent)!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-btn,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-input,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body textarea.rt-input,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-eng-select{background:color-mix(in srgb,#fff 88%,transparent)!important;color:#14120e!important;border:1px solid color-mix(in srgb,#3c362e 34%,transparent)!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-eng-select option,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-input option{background:#fff;color:#14120e}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-err{color:#9a3434!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-btn-primary{background:#3f6b52!important;border-color:#3f6b52!important;color:#fff!important}
+body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body .rt-rep-http,body .dshp-dock:has(.dshp-root[data-theme="white"]) .dshp-dock-body pre{background:color-mix(in srgb,#fff 84%,transparent)!important;color:#14120e!important;border:1px solid color-mix(in srgb,#3c362e 28%,transparent)!important}
 body:not([data-ds-dark-theme]) .dshp-auth-modal{background:#fffcf7;color:#1a1916;border-color:#c9c3b6}
 body:not([data-ds-dark-theme]) .dshp-auth-legal{background:#f3f0e8;color:#1a1916;border-color:#c9c3b6}
 body:not([data-ds-dark-theme]) .dshp-auth-warn{background:#f5e6c8;color:#6b4a10}
@@ -818,20 +832,20 @@ body:not([data-ds-dark-theme]) .dshp-auth-ops button{border-color:#c9c3b6;color:
 body:not([data-ds-dark-theme]) .dshp-auth-ops button.primary{background:#3f6b52;border-color:#3f6b52;color:#fff}
 body:not([data-ds-dark-theme]) .dshp-hero-chip-btn,body:not([data-ds-dark-theme]) .dshp-hbtn{color:#1a1916;border-color:#3f6b52;background:#d7e6dc}
 body:not([data-ds-dark-theme]) .dshp-hero-chip-btn:hover,body:not([data-ds-dark-theme]) .dshp-hbtn:hover{background:#c5dacd;color:#1a1916}
-/* 宿主深色 / 墨主题：清洗实底墨色，与「墨」开关一致 */
-body[data-ds-dark-theme] .dshp-dock{background:#2a2926!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;border:1px solid #4a4740!important;box-shadow:0 18px 48px rgba(0,0,0,.45)!important;color:#f4f1ea!important}
-body[data-ds-dark-theme] .dshp-dock-head,body[data-ds-dark-theme] .dshp-dock-tabs{background:#32312d!important;border-bottom-color:#4a4740!important;color:#f4f1ea!important}
-body[data-ds-dark-theme] .dshp-dock-head b,body[data-ds-dark-theme] .dshp-dock-head button{color:#f4f1ea!important;text-shadow:none!important}
-body[data-ds-dark-theme] .dshp-dock-head button{background:#2a2926!important;border-color:#4a4740!important}
-body[data-ds-dark-theme] .dshp-dock-tab{color:#c9c3b8!important;text-shadow:none!important}
-body[data-ds-dark-theme] .dshp-dock-tab:hover,body[data-ds-dark-theme] .dshp-dock-tab.on{color:#f4f1ea!important}
-body[data-ds-dark-theme] .dshp-dock-body{background:#2a2926!important}
-body[data-ds-dark-theme] .dshp-dock-body .dshp-root{background:#2a2926!important;--dshp-bg:#2a2926;--dshp-paper:#32312d;--dshp-fill:#353430;--dshp-ink:#f4f1ea;--dshp-mute:#c9c3b8;--dshp-line:#4a4740;--dshp-accent:#9bb5a6;--dshp-accent-soft:#3a433d}
-body[data-ds-dark-theme] .dshp-dock-body .dshp-panel,body[data-ds-dark-theme] .dshp-dock-body .dshp-metric,body[data-ds-dark-theme] .dshp-dock-body .dshp-group,body[data-ds-dark-theme] .dshp-dock-body .dshp-editor,body[data-ds-dark-theme] .dshp-dock-body .dshp-active,body[data-ds-dark-theme] .dshp-dock-body .dshp-ask,body[data-ds-dark-theme] .dshp-dock-body .dshp-create,body[data-ds-dark-theme] .dshp-dock-body .dshp-switch,body[data-ds-dark-theme] .dshp-dock-body .dshp-rulelist{background:#32312d!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;border-color:#4a4740!important;color:#f4f1ea!important}
-body[data-ds-dark-theme] .dshp-dock-body .dshp-field,body[data-ds-dark-theme] .dshp-dock-body .dshp-area,body[data-ds-dark-theme] .dshp-dock-body select.dshp-field,body[data-ds-dark-theme] .dshp-dock-body .dshp-field.dshp-ver{background:#2a2926!important;color:#f4f1ea!important;border-color:#4a4740!important;backdrop-filter:none!important;color-scheme:dark}
-body[data-ds-dark-theme] .dshp-dock-body .dshp-title,body[data-ds-dark-theme] .dshp-dock-body .dshp-sub h4,body[data-ds-dark-theme] .dshp-dock-body .dshp-group-h strong,body[data-ds-dark-theme] .dshp-dock-body .dshp-metric b,body[data-ds-dark-theme] .dshp-dock-body .dshp-btn,body[data-ds-dark-theme] .dshp-dock-body .dshp-rule-name{color:#f4f1ea!important}
-body[data-ds-dark-theme] .dshp-dock-body .dshp-mute,body[data-ds-dark-theme] .dshp-dock-body .dshp-kicker,body[data-ds-dark-theme] .dshp-dock-body .dshp-metric span,body[data-ds-dark-theme] .dshp-dock-body .dshp-group-h em,body[data-ds-dark-theme] .dshp-dock-body .dshp-count,body[data-ds-dark-theme] .dshp-dock-body .dshp-rule-meta,body[data-ds-dark-theme] .dshp-dock-body .dshp-hint{color:#c9c3b8!important}
-body[data-ds-dark-theme] .dshp-dock-body .dshp-switch button.is-on{background:#3a433d;color:#f4f1ea}
+/* 墨玻璃：浅色字压在偏黑的半透明底上。下拉选项保持实底，系统菜单不参与模糊。 */
+body .dshp-dock:has(.dshp-root[data-theme="dusk"]){background:color-mix(in srgb,#100e0c 76%,transparent)!important;backdrop-filter:blur(18px) saturate(1.2)!important;-webkit-backdrop-filter:blur(18px) saturate(1.2)!important;border:1px solid color-mix(in srgb,#fff 22%,transparent)!important;box-shadow:0 18px 48px rgba(0,0,0,.42)!important;color:#f7f4ee!important}
+body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-head,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-tabs{background:color-mix(in srgb,#161410 52%,transparent)!important;border-bottom-color:color-mix(in srgb,#fff 18%,transparent)!important;color:#f7f4ee!important}
+body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-head b,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-head button{color:#f7f4ee!important;text-shadow:0 1px 2px rgba(0,0,0,.65)!important}
+body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-head button{background:color-mix(in srgb,#0c0b09 70%,transparent)!important;border-color:color-mix(in srgb,#fff 22%,transparent)!important}
+body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-tab{color:#e6dfd2!important;text-shadow:0 1px 2px rgba(0,0,0,.55)!important}
+body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-tab:hover,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-tab.on{color:#f7f4ee!important}
+body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body{background:transparent!important}
+body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-root{background:transparent!important;--dshp-bg:transparent;--dshp-paper:color-mix(in srgb,#161410 68%,transparent);--dshp-fill:color-mix(in srgb,#fff 8%,transparent);--dshp-ink:#f7f4ee;--dshp-mute:#e6dfd2;--dshp-line:color-mix(in srgb,#fff 20%,transparent);--dshp-accent:#b7d0c2;--dshp-accent-soft:color-mix(in srgb,#3a433d 70%,transparent)}
+body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-panel,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-metric,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-group,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-editor,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-active,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-ask,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-create,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-switch,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-rulelist{background:color-mix(in srgb,#161410 64%,transparent)!important;backdrop-filter:blur(14px) saturate(1.15)!important;-webkit-backdrop-filter:blur(14px) saturate(1.15)!important;border-color:color-mix(in srgb,#fff 18%,transparent)!important;color:#f7f4ee!important}
+body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-field,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-area{background:color-mix(in srgb,#0a0908 84%,transparent)!important;color:#f7f4ee!important;border-color:color-mix(in srgb,#fff 24%,transparent)!important;backdrop-filter:blur(12px)!important;-webkit-backdrop-filter:blur(12px)!important;color-scheme:dark}
+body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-title,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-sub h4,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-group-h strong,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-metric b,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-btn,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-rule-name{color:#f7f4ee!important;text-shadow:0 1px 2px rgba(0,0,0,.55)}
+body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-mute,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-kicker,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-metric span,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-group-h em,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-count,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-rule-meta,body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-hint{color:#e6dfd2!important}
+body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-switch button.is-on{background:color-mix(in srgb,#3a433d 78%,transparent);color:#f7f4ee}
 .dshp-dock-resize,.dshp-dock-resize-l,.dshp-dock-resize-r,.dshp-dock-resize-b{position:absolute;z-index:60;pointer-events:auto;touch-action:none}
 .dshp-dock-resize{right:0;bottom:0;width:22px;height:22px;cursor:nwse-resize;background:linear-gradient(135deg,transparent 46%,color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 75%,transparent) 46%);border-radius:0 0 12px 0;opacity:.95}
 .dshp-dock-resize-l{left:-2px;top:0;bottom:0;width:10px;cursor:ew-resize;background:color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 18%,transparent)}
@@ -1069,6 +1083,8 @@ body[data-ds-dark-theme] .dshp-dock-body .dshp-switch button.is-on{background:#3
 			const [override, setOverride] = useState("");
 			const [defaultOverride, setDefaultOverride] = useState("");
 			const [overrideLoaded, setOverrideLoaded] = useState(false);
+			const [ownServers, setOwnServers] = useState("");
+			const [ownLoaded, setOwnLoaded] = useState(false);
 			const [patchBusy, setPatchBusy] = useState(false);
 			const [updateBusy, setUpdateBusy] = useState(false);
 			const [canApplyUpdate, setCanApplyUpdate] = useState(false);
@@ -1258,6 +1274,14 @@ body[data-ds-dark-theme] .dshp-dock-body .dshp-switch button.is-on{background:#3
 						else setNotice({ kind: "error", text: tr("err.override", { error: (d && d.error) || "" }) });
 					})
 					.catch((e) => setNotice({ kind: "error", text: tr("err.override", { error: e.message }) }));
+				apiJson("/dsh-purge/own-servers")
+					.then((d) => {
+						if (d && d.ok) {
+							setOwnServers(typeof d.content === "string" ? d.content : "");
+							setOwnLoaded(true);
+						}
+					})
+					.catch(() => {});
 			}, []);
 
 			useEffect(() => { loadAll(); }, [loadAll]);
@@ -1329,8 +1353,16 @@ body[data-ds-dark-theme] .dshp-dock-body .dshp-switch button.is-on{background:#3
 								loadAll();
 								return;
 							}
+							if (action === "apply" && d.asar_swap_started) {
+								setNotice({ kind: "ok", text: tr("restart.asarSwap") });
+								loadAll();
+								return;
+							}
 							if (action === "apply" && (d.restart_after_apply || d.restarting || d.unpacked_asar || d.needs_full_quit)) {
-								setNotice({ kind: "ok", text: tr("update.restarting") });
+								setNotice({
+									kind: "ok",
+									text: d.asar_still_sealed ? tr("restart.asarSwap") : tr("update.restarting"),
+								});
 								loadAll();
 								const surf = hostSurfaceOf(state) || clientGuessSurface() || "web";
 								restartDsh(setNotice, setPatchBusy, tr, surf);
@@ -1465,8 +1497,7 @@ body[data-ds-dark-theme] .dshp-dock-body .dshp-switch button.is-on{background:#3
 			const total = s && s.patches_total ? s.patches_total : 26;
 			const applied = s && typeof s.patches_applied === "number" ? s.patches_applied : 0;
 			const skipped = s && typeof s.patches_skipped === "number" ? s.patches_skipped : 0;
-			const settled = Math.min(total, applied + skipped);
-			const pct = total ? Math.round((settled / total) * 100) : 0;
+			const pct = total ? Math.round((applied / total) * 100) : 0;
 
 			const hostSurface = hostSurfaceOf(s);
 			const versions = (updateInfo && updateInfo.versions) || [];
@@ -1550,8 +1581,8 @@ body[data-ds-dark-theme] .dshp-dock-body .dshp-switch button.is-on{background:#3
 				),
 				s ? h("div", { className: "dshp-metrics" },
 					h("div", { className: "dshp-metric" },
-						h("b", null, settled + " / " + total),
-						h("span", null, t("metric.purged")),
+						h("b", null, applied + " / " + total),
+						h("span", null, skipped > 0 ? t("metric.purged.skip", { n: skipped }) : t("metric.purged")),
 					),
 					h("div", { className: "dshp-metric" },
 						h("b", { style: { fontSize: 13, fontFamily: "var(--dshp-mono)", fontWeight: 500 } },
@@ -1650,6 +1681,42 @@ body[data-ds-dark-theme] .dshp-dock-body .dshp-switch button.is-on{background:#3
 					className: "dshp-hint",
 					style: { margin: "8px 0 0", color: "var(--dshp-danger, #c44)", fontSize: 12 },
 				}, t("need.prompt")) : null,
+				h("div", { className: "dshp-sub" },
+					h("h4", null, t("own.title")),
+					h("div", { className: "dshp-row", style: { margin: 0 } },
+						h(Btn, {
+							kind: "primary",
+							tiny: true,
+							disabled: !ownLoaded,
+							onClick: () => {
+								fetch("/dsh-purge/own-servers", {
+									method: "POST",
+									headers: { "content-type": "application/json" },
+									body: JSON.stringify({ content: ownServers }),
+								}).then((r) => r.json()).then((d) => {
+									if (!d || !d.ok) {
+										setNotice({ kind: "error", text: (d && d.error) || t("err.override", { error: "" }) });
+										return;
+									}
+									if (typeof d.content === "string") setOwnServers(d.content);
+									setNotice({
+										kind: "ok",
+										text: d.dropped > 0 ? t("saved.own.dropped", { n: d.dropped }) : t("saved.own"),
+									});
+								}).catch((e) => setNotice({ kind: "error", text: e.message }));
+							},
+						}, t("own.save")),
+					),
+				),
+				h("textarea", {
+					className: "dshp-area",
+					value: ownServers,
+					onChange: (e) => setOwnServers(e.target.value),
+					spellCheck: false,
+					rows: 4,
+					style: { minHeight: 96 },
+				}),
+				h("p", { className: "dshp-hint", style: { margin: "8px 0 0", color: "var(--dshp-mute)", fontSize: 12 } }, t("own.hint")),
 			);
 		}
 
@@ -2269,6 +2336,11 @@ body[data-ds-dark-theme] .dshp-dock-body .dshp-switch button.is-on{background:#3
 				.then((d) => {
 					if (!d.ok) throw new Error(d.error || "restart failed");
 					const next = (d && d.surface) || surf;
+					if ((next === "desktop" || d.fullApp) && d.restarting === false) {
+						setNotice({ kind: "error", text: t("restart.fail", { error: d.note || "not started" }) });
+						setBusy(false);
+						return;
+					}
 					setNotice({ kind: "ok", text: hostText(t, "restarting", next) });
 					// 桌面端整应用会退出重开。先刷新内嵌 web 会单独重启 Host。
 					if (next === "desktop" || (d && d.fullApp) || clientGuessSurface() === "desktop") return;
@@ -2383,7 +2455,7 @@ body[data-ds-dark-theme] .dshp-dock-body .dshp-switch button.is-on{background:#3
 .dshp-rewind:hover:not(:disabled){background:var(--dsw-alias-interactive-bg-hover,rgba(127,127,127,.12));color:var(--dsw-alias-label-primary,currentColor)}
 .dshp-rewind:disabled{opacity:.4;cursor:default}
 .dshp-rewind svg{display:block}
-.dshp-rewind-menu{position:absolute;right:0;bottom:calc(100% + 6px);z-index:1200;box-sizing:border-box;min-width:196px;padding:4px;border:0;border-radius:12px;background:var(--dsw-specific-menu,#fff);color:var(--dsw-alias-label-primary,#1a1a1a);--dsw-elevation-stroke-color:var(--dsw-alias-border-l1);box-shadow:var(--dsw-elevation-prominent,0 8px 24px rgba(0,0,0,.16))}
+.dshp-rewind-menu{position:fixed;z-index:2147483000;box-sizing:border-box;min-width:220px;padding:4px;border:0;border-radius:12px;background:var(--dsw-specific-menu,#fff);color:var(--dsw-alias-label-primary,#1a1a1a);--dsw-elevation-stroke-color:var(--dsw-alias-border-l1);box-shadow:var(--dsw-elevation-prominent,0 8px 24px rgba(0,0,0,.16));transform:translateY(-100%)}
 body[data-ds-dark-theme] .dshp-rewind-menu{background:var(--dsw-specific-menu,#32312d);color:var(--dsw-alias-label-primary,#e6e2db);--dsw-elevation-stroke-color:var(--dsw-alias-border-l1,#3f3d38);box-shadow:var(--dsw-elevation-prominent,0 10px 28px rgba(0,0,0,.45))}
 .dshp-rewind-item{display:flex;flex-direction:column;gap:2px;width:100%;padding:8px 10px;border:0;border-radius:8px;background:transparent;color:inherit;text-align:left;cursor:pointer;font:12px/1.3 var(--ds-font-sans,system-ui,sans-serif)}
 .dshp-rewind-item:hover{background:var(--dsw-alias-interactive-bg-hover,rgba(127,127,127,.12))}
@@ -2659,35 +2731,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 			static getDerivedStateFromError() { return { failed: true }; }
 			componentDidCatch(error) { try { console.error("[dsh-purge] rewind slot:", error); } catch { /* ignore */ } }
 			render() {
-				if (this.state.failed) {
-					return h("button", {
-						type: "button",
-						className: "dshp-rewind",
-						title: "回退上一句",
-						onMouseDown: (e) => e.preventDefault(),
-						onClick: async () => {
-							const sessionId = currentSessionId(rewindSessions);
-							if (!sessionId) return;
-							try {
-								const data = await apiJson("/dsh-purge/rewind", {
-									method: "POST",
-									headers: { "content-type": "application/json" },
-									body: JSON.stringify({ sessionId, mode: "once" }),
-								});
-								if (data && data.ok && data.sessionId) {
-									if (data.at) rewindSeenAt = data.at;
-									const text = isPluginDraft(data.text) ? "" : (data.text || "");
-									armComposerFill(data.sessionId, text);
-									scheduleComposerFill(data.sessionId, text);
-									await openRewoundSession(rewindSessions, data.sessionId);
-									scheduleComposerFill(data.sessionId, text);
-								}
-							} catch (e) {
-								window.alert("回退失败: " + String((e && e.message) || e));
-							}
-						},
-					}, h("style", null, REWIND_CSS), "回退");
-				}
+				if (this.state.failed) return h(RewindFallback, this.props);
 				return h(RewindButton, this.props);
 			}
 		}
@@ -2800,15 +2844,121 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 			);
 		}
 
+		function rewindMenuNode(t, menuPos, menuRef, runRewind) {
+			const menu = h("div", {
+				className: "dshp-rewind-menu",
+				role: "menu",
+				ref: menuRef,
+				style: menuPos ? { left: menuPos.left + "px", top: menuPos.top + "px" } : { left: "8px", bottom: "48px", transform: "none" },
+			},
+				h("button", {
+					type: "button",
+					className: "dshp-rewind-item",
+					onMouseDown: (e) => { e.preventDefault(); e.stopPropagation(); },
+					onClick: (e) => { e.preventDefault(); e.stopPropagation(); runRewind("once"); },
+				},
+					h("b", null, rewindText(t, "rewind.once", "回退一次")),
+					h("span", null, rewindText(t, "rewind.once.hint", "把上一句放回输入框，并清掉已经发出去的内容")),
+				),
+				h("button", {
+					type: "button",
+					className: "dshp-rewind-item",
+					onMouseDown: (e) => { e.preventDefault(); e.stopPropagation(); },
+					onClick: (e) => { e.preventDefault(); e.stopPropagation(); runRewind("round"); },
+				},
+					h("b", null, rewindText(t, "rewind.round", "回退上一轮")),
+					h("span", null, rewindText(t, "rewind.round.hint", "把上一轮放回输入框，并清掉已经发出去的内容")),
+				),
+			);
+			try {
+				const rd = require("react-dom");
+				if (rd && typeof rd.createPortal === "function" && typeof document !== "undefined") {
+					return rd.createPortal(menu, document.body);
+				}
+			} catch { /* 没有 portal 时菜单仍挂在按钮旁 */ }
+			return menu;
+		}
+
+		class RewindFallback extends Component {
+			constructor(p) {
+				super(p);
+				this.state = { menu: false, busy: false, notice: "", menuPos: null };
+				this.wrap = null;
+				this.menuEl = null;
+				this.onDoc = (event) => {
+					if (this.wrap && this.wrap.contains(event.target)) return;
+					if (this.menuEl && this.menuEl.contains(event.target)) return;
+					this.setState({ menu: false });
+				};
+			}
+			componentDidMount() {
+				document.addEventListener("mousedown", this.onDoc);
+			}
+			componentWillUnmount() {
+				document.removeEventListener("mousedown", this.onDoc);
+			}
+			run(mode) {
+				const sessionId = this.props.sessionId || currentSessionId(rewindSessions);
+				if (!sessionId || this.state.busy) return;
+				this.setState({ busy: true, menu: false, notice: "" });
+				apiJson("/dsh-purge/rewind", {
+					method: "POST",
+					headers: { "content-type": "application/json" },
+					body: JSON.stringify({ sessionId, mode }),
+				}).then(async (data) => {
+					if (!data || !data.ok || !data.sessionId || data.cleared === false) {
+						throw new Error((data && data.error) || "没有清掉之前发送的内容");
+					}
+					if (data.at) rewindSeenAt = data.at;
+					const text = isPluginDraft(data.text) ? "" : (data.text || "");
+					armComposerFill(data.sessionId, text);
+					await openRewoundSession(rewindSessions, data.sessionId);
+					scheduleComposerFill(data.sessionId, text);
+					this.setState({ busy: false });
+				}).catch((e) => {
+					this.setState({
+						busy: false,
+						notice: "回退失败: " + String((e && e.message) || e),
+					});
+				});
+			}
+			openMenu() {
+				const rect = this.wrap && this.wrap.getBoundingClientRect ? this.wrap.getBoundingClientRect() : null;
+				this.setState({
+					menu: !this.state.menu,
+					notice: "",
+					menuPos: rect ? { left: Math.max(8, rect.right - 228), top: Math.max(8, rect.top - 8) } : null,
+				});
+			}
+			render() {
+				const sessionId = this.props.sessionId || currentSessionId(rewindSessions);
+				const t = this.props.t || translate;
+				const label = this.state.busy ? "回退中…" : (this.state.notice ? this.state.notice.slice(0, 18) : "回退");
+				return h("div", { className: "dshp-rewind-wrap", ref: (node) => { this.wrap = node; } },
+					h("style", null, REWIND_CSS),
+					h("button", {
+						type: "button",
+						className: "dshp-rewind",
+						disabled: this.state.busy || !sessionId,
+						onMouseDown: (e) => e.preventDefault(),
+						onClick: (e) => { e.preventDefault(); this.openMenu(); },
+					}, label),
+					this.state.menu ? rewindMenuNode(t, this.state.menuPos, (node) => { this.menuEl = node; }, (mode) => this.run(mode)) : null,
+				);
+			}
+		}
+
 		function RewindButton(props) {
 			const t = props.t || translate;
 			const sessions = rewindSessions;
 			const inputActions = props.inputActions;
 			const sessionId = props.sessionId || currentSessionId(sessions);
 			const wrapRef = useRef(null);
+			const menuRef = useRef(null);
 			const [busy, setBusy] = useState(false);
 			const [notice, setNotice] = useState("");
 			const [menu, setMenu] = useState(false);
+			const [menuPos, setMenuPos] = useState(null);
 
 			useEffect(() => {
 				if (!sessionId) return;
@@ -2823,7 +2973,9 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 			useEffect(() => {
 				if (!menu) return;
 				const onDoc = (event) => {
-					if (wrapRef.current && !wrapRef.current.contains(event.target)) setMenu(false);
+					if (wrapRef.current && wrapRef.current.contains(event.target)) return;
+					if (menuRef.current && menuRef.current.contains(event.target)) return;
+					setMenu(false);
 				};
 				document.addEventListener("mousedown", onDoc);
 				return () => document.removeEventListener("mousedown", onDoc);
@@ -2840,20 +2992,23 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 						headers: { "content-type": "application/json" },
 						body: JSON.stringify({ sessionId, mode }),
 					});
-					if (!data || !data.ok || !data.sessionId) throw new Error((data && data.error) || "rewind");
+					if (!data || !data.ok || !data.sessionId || data.cleared === false) {
+						throw new Error((data && data.error) || "没有清掉之前发送的内容");
+					}
 					if (data.at) rewindSeenAt = data.at;
 					const text = isPluginDraft(data.text) ? "" : (data.text || "");
 					armComposerFill(data.sessionId, text);
 					await openRewoundSession(sessions, data.sessionId);
 					scheduleComposerFill(data.sessionId, text);
 				} catch (e) {
-					setNotice(rewindText(t, "rewind.fail", "回退失败: {error}").replace("{error}", String((e && e.message) || e)));
+					const message = rewindText(t, "rewind.fail", "回退失败: {error}").replace("{error}", String((e && e.message) || e));
+					setNotice(message);
 				} finally {
 					setBusy(false);
 				}
 			};
 
-			const onClick = async (event) => {
+			const onClick = (event) => {
 				event?.preventDefault?.();
 				event?.stopPropagation?.();
 				if (!sessionId || busy) return;
@@ -2861,20 +3016,15 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 					setMenu(false);
 					return;
 				}
-				setBusy(true);
-				setNotice("");
-				try {
-					const info = await apiJson("/dsh-purge/rewind/options?sessionId=" + encodeURIComponent(sessionId));
-					if (info && info.ok && info.kind === "main") {
-						setMenu(true);
-						return;
-					}
-					await runRewind("once");
-				} catch (e) {
-					setNotice(rewindText(t, "rewind.fail", "回退失败: {error}").replace("{error}", String((e && e.message) || e)));
-				} finally {
-					setBusy(false);
+				const rect = wrapRef.current?.getBoundingClientRect?.();
+				if (rect) {
+					setMenuPos({
+						left: Math.max(8, rect.right - 228),
+						top: Math.max(8, rect.top - 8),
+					});
 				}
+				setNotice("");
+				setMenu(true);
 			};
 
 			const failLabel = notice
@@ -2891,6 +3041,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 					className: "dshp-rewind",
 					title,
 					"aria-label": rewindText(t, "rewind.aria", "回退"),
+					"aria-expanded": menu ? "true" : "false",
 					disabled: busy || !sessionId,
 					onMouseDown: (e) => e.preventDefault(),
 					onClick,
@@ -2903,26 +3054,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 					),
 					label,
 				),
-				menu ? h("div", { className: "dshp-rewind-menu", role: "menu" },
-					h("button", {
-						type: "button",
-						className: "dshp-rewind-item",
-						onMouseDown: (e) => e.preventDefault(),
-						onClick: () => runRewind("once"),
-					},
-						h("b", null, rewindText(t, "rewind.once", "回退一次")),
-						h("span", null, rewindText(t, "rewind.once.hint", "只退当前对话上一句")),
-					),
-					h("button", {
-						type: "button",
-						className: "dshp-rewind-item",
-						onMouseDown: (e) => e.preventDefault(),
-						onClick: () => runRewind("round"),
-					},
-						h("b", null, rewindText(t, "rewind.round", "回退上一轮")),
-						h("span", null, rewindText(t, "rewind.round.hint", "退回上一轮主对话，本轮子代理一并去掉")),
-					),
-				) : null,
+				menu ? rewindMenuNode(t, menuPos, menuRef, runRewind) : null,
 			);
 		}
 
