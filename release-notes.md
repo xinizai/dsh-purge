@@ -1,3 +1,73 @@
+# 1.1.46
+
+## 中文
+
+- 版本升级到 1.1.46。1.1.45 有问题，略过，不要安装。
+- 默认提示词按 `default-prompt-inject.md` 重新加密写入。
+- 修复注入不稳定：第二轮或任务做到一半人设失效、被当成 `project_instructions` 拆掉的问题。
+- 工作区替换稿和作用域说明改回 0.1.7 的优先级：不能压过 system、developer 和用户原话。主 intro 的反软拒绝句保持不变。已经叠上的作用域强句整段收成这一句。
+- 进模型前剥掉外层 ChatML / `<project_instructions>` 壳，避免模型把真实 system 注入当成项目说明。
+- 组装后的系统提示段统一保证 `text` 为字符串；不再会话钉死整段 sections，避免第二轮 `renderPrompt` 读 `undefined.length` 直接死掉并报 `(gateway/internal)`。
+- `agent/pre-step` 始终把 `decision.messages` 规范成数组，避免第二轮发送时读空 messages 炸掉。
+- 地区闸门：多地址域名不能只因其中一个解析到受控地区就整站拦死（CDN/多线噪声 IP）。
+- 回退后 `deriveMessages` / `systemNodes` 对缺 `content` 做兜底，避免回退再发送时 `(gateway/internal)`。
+- 清洗进度：未定位宿主时不再显示吓人的 `0/63`；本机不需要或组件未装的项计入已就绪，避免假的 `48/63`。
+- 点「应用」就会写入默认提示词并注入，框空时用内置默认，不必先点保存。
+- 修复回退：`snapshotEvents()` 为空时不再读 `undefined.length`，避免 `(gateway/internal)` 报错导致回退无效。
+
+## English
+
+- Version 1.1.46. Skip 1.1.45; that version has bugs. Do not install it.
+- Reseal the default prompt from `default-prompt-inject.md`.
+- Fix unstable inject: persona dropping on the second turn or mid-task, including cases where the model treated the system inject as `project_instructions` and rejected it.
+- Replacement and scope workspace intros match 0.1.7 again: they do not override system, developer, or direct user instructions. The main intro anti-soft-refuse text stays. A stacked scope paragraph is collapsed back to that one sentence.
+- Strip outer ChatML / `<project_instructions>` wrappers before the text reaches the model, so a real system inject is not read as project instructions.
+- Sanitize assembled system-prompt sections so `text` is always a string; stop pinning full sections for a session, which could make the second turn crash in `renderPrompt` on `undefined.length` with `(gateway/internal)`.
+- Always normalize `decision.messages` to an array in `agent/pre-step`, so a second send does not die on a missing messages list.
+- Region gate: multi-address hosts are no longer blocked just because one resolved IP is in a controlled region (CDN/noise).
+- After rewind, `deriveMessages` / `systemNodes` tolerate missing `content`, so resend no longer fails with `(gateway/internal)`.
+- Clean progress: do not show a scary `0/63` before the host is located; items not needed on this install count as ready, so a fake `48/63` no longer appears.
+- Apply writes and injects the default prompt; an empty box uses the bundled default, so a separate Save is not required.
+- Fix rewind: empty `snapshotEvents()` no longer reads `undefined.length`, so undo no longer fails with `(gateway/internal)`.
+
+# 1.1.44
+
+## 中文
+
+- 版本升级到 1.1.44。
+- 官方桌面解开 `app.asar` 时先写到旁边的目录，解开完成才换上 `resources/app`。目录里已经有宿主之后只改这些文件。同一份归档又出现时只把它挪开。归档的大小或时间变了，或目录不在了，才再解一次。解包卡住或补丁没写完，把上一份放回去，升级标记留到下次再试。
+- 回退上一轮只撤掉最后一条已经发出的消息和它的回复，更早的轮次留在对话里，也从模型请求里拿掉。连续回退后留下的空标记不再进下一轮请求，下一句按新消息发。
+- 可编辑提示词整份放在系统提示最前，同一份正文不再拼第二遍。每一步用当前这一份替换第一条系统提示。
+- deepseek.com 的系统提示固定走 system，思维链照旧发送。
+- 地区拦截只看这次任务里的目标。自己的服务器只认名单上的那一个地址或主机名。禁止句写上之后才结束这一轮。
+- 官方始终用带 CTF 的默认提示词。红队开了规则集就只用规则集；否则用去掉 CTF 的默认提示词，再接红队操作。子代理跟主会话吃同一份。磁盘没有提示词时启动就用默认那份，不必先点保存。
+
+## English
+
+- Version 1.1.44.
+- Unpacking `app.asar` writes beside `resources/app` and swaps in only after the unpack finishes. Once that directory is usable, later starts only edit those files. The same archive showing up again is moved aside. A new size or mtime, or a missing directory, is unpacked once. If unpacking sticks or that patch round does not finish, the previous directory is put back and the upgrade marker stays for the next start.
+- Rewinding the previous round removes only that sent message and its reply. Earlier rounds stay on screen and leave the next model request. Leftover rewind markers stay off the next model request, so the next send is a new message.
+- The editable prompt is placed once at the front of the system prompt. Each step replaces the first system prompt with that current text.
+- Instructions for deepseek.com stay on the system role. Thinking is still sent.
+- The region check looks only at this task's target. An own server is allowed only when that exact address or hostname is on the list. The turn ends after the denial sentence is written.
+- Official mode always uses the default prompt, including CTF. Red team uses only the active rule set, or the default prompt without CTF followed by the red team steps. Subagents receive the same inject as the main session. If the prompt file is empty, startup uses the bundled default without requiring Save.
+
+# 1.1.43
+
+## 中文
+
+- 版本升级到 1.1.43。
+- 还没定位到本机 Harness 时，不再把每一条显示成跳过，分组计数也不再把跳过算成已完成。
+- 补丁列表补齐到全部 52 条，总数和分组对得上。
+- 启动时如果暂时找不到宿主目录，不再把这个空结果缓存住。
+
+## English
+
+- Version 1.1.43.
+- Before this install is located, rows are no longer shown as skipped, and a skip no longer counts as done in the group total.
+- The patch list now includes all 52 items, so the total matches the groups.
+- A miss while looking up the host directory is not cached for the rest of the process.
+
 # 1.1.42
 
 ## 中文
