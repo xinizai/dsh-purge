@@ -1,3 +1,53 @@
+# 1.1.59
+
+## 中文
+
+- 版本升级到 1.1.59。
+- 点应用后不再因为宿主路径或旧标记对不上，就报「清洗没有写进当前宿主」（#65）。
+- `resources\app\node_modules` 和 `resources\app\dsh\node_modules` 都认。原文里已经没有官方身份句、也没有丢掉注入的写法时，不再要求那两条标记。
+- complete 段补丁同时认 tab 和空格。
+
+## English
+
+- Version 1.1.59.
+- Apply no longer reports that the clean missed the current host just because the package path or the old markers do not match (#65).
+- Both `resources/app/node_modules` and `resources/app/dsh/node_modules` count. If the official identity sentence and the inject-dropping return are already gone, those two markers are not required.
+- The complete-prompt patch matches both tab and space indentation.
+
+# 1.1.58
+
+## 中文
+
+- 版本升级到 1.1.58。
+- 打开、应用、重启都会挂上提示词。磁盘上有正文就用磁盘，没有就用规则集，再没有就用内置默认，不用再点保存。
+- 启动不再在页面发出之后改写前端 client.js，避免输入框因模块版本号对不上而消失（#63）。
+- macOS / Linux 已解包桌面端点应用后会退出并重新打开；清洗标记两种写法都认（#64）。
+
+## English
+
+- Version 1.1.58.
+- Open, Apply, and restart all hang the prompt. A saved file wins, then the active rule set, then the built-in default. Save is not required.
+- Startup no longer rewrites frontend client.js after the page has taken a module revision, so the composer does not disappear (#63).
+- Unpacked macOS and Linux desktop builds quit and relaunch after Apply. Both inject markers count as clean (#64).
+
+# 1.1.57
+
+## 中文
+
+- 版本升级到 1.1.57。
+- 应用并重启后，设置框里的提示词直接挂到系统段；框空则用当前规则集。两者都空就停下来要求输入。
+- 创造、PTC、极简、unrestricted、梁神与标准模式一样清掉拦截和禁止，并保住各自的工具流程。
+- 演练授权按本机目录保存，更新后不用重授权；卸载成功后才清掉。空的环境初始化不再当成已配置。
+- 官方 Messages 请求的 system 字段改用当前系统提示，不再钉住第一条。
+
+## English
+
+- Version 1.1.57.
+- After Apply and restart, the settings-box prompt is hung on the system section. An empty box uses the active rule set. If both are empty, Apply stops and asks for a prompt.
+- Cordis, PTC, minimal, unrestricted, and Liangshen clear intercepts and bans the same way standard does, and keep their own tools.
+- Drill authorization is stored in this install and survives updates. It is cleared only after uninstall succeeds. An empty environment init is no longer treated as configured.
+- The official Messages request system field uses the current system prompt instead of the first snapshot.
+
 # 1.1.56
 
 ## 中文
