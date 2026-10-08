@@ -1,3 +1,83 @@
+# 1.1.64
+
+## 中文
+
+- 版本 **1.1.64**。
+- 红队流程八项。角色稿只在**新建靶标**时播种；已经建好的靶标，要在演练台里把智能体同步一次才会换成新稿。
+- **内网**改为叶子节点，自己按收集、梳理、发现、利用做，不再往下派活。
+- 并发名额：不带 key 的 release 只放最早的一条。子智能体结束由服务端自动释放；手动释放必须带上 acquire 返回的 key。
+- 预检带 `include` 时只体检点名的技能，不再被全局缺密钥拖成失败。缺项带上由用户执行的修复说明。
+- IPv6 计分至少两个冒号，`dc01:389` 这类主机名不再 ×3。计分只留在 `score-rules.js`。
+- 攻击链计分跳过已停用的得分点。
+- `.env` 认 `export KEY=value`。未加引号的行内注释会剥掉，引号里的 `#` 保留。
+- 内网计分 code 改为 `central-system`、`boundary-logical`、`boundary-strong` 等，以 `redteam_score_list` 实际返回为准。
+- 漏洞发现和利用从 `priority=high` 打起。优先级为空时，先回报指挥补一轮评估。
+- 删掉没有调用的代码。设置页里过期的 `legacyApplyPath(...)` 调用改为 `applyPathOp`。
+
+## English
+
+- **1.1.64**.
+- Eight red-team flow fixes. Role prompts seed **new** engagements only; sync agents on an existing engagement to pick them up.
+- The internal role is a leaf and does collect, assess, scan, and exploit itself.
+- A release without a key drops only the oldest reservation. Ending a subagent auto-releases; a manual release must carry the acquire key.
+- Preflight `include` checks only the named skills. Broken items include fixes for the user to run.
+- IPv6 scoring needs at least two colons, so `dc01:389` is no longer ×3. Scoring lives only in `score-rules.js`.
+- Attack-chain scoring skips disabled score points.
+- `.env` accepts `export KEY=value` and strips unquoted inline comments. A `#` inside quotes stays.
+- Internal score codes match the live list (`central-system`, `boundary-logical`, `boundary-strong`, and the rest), taken from `redteam_score_list`.
+- Vuln-scan and exploit start at `priority=high`. If priority is empty, report back and run another assess first.
+- Unused code removed. Stale settings calls to `legacyApplyPath` now call `applyPathOp`.
+
+# 1.1.63
+
+## 中文
+
+- 版本 **1.1.63**。
+- 官方更新脚本去掉中文注释，避免 `official update script is not ASCII`。
+
+## English
+
+- **1.1.63**.
+- Official update script is ASCII only, so the handoff no longer fails the ASCII check.
+
+# 1.1.62
+
+## 中文
+
+- 版本 **1.1.62**。
+- 继续/重试重新打开。
+- 锚点门：首轮输出上限 1024→8192，最多 2 步；已调工具即放开，英文思考过不了 we 锚也不再卡住。
+- 已有预设的锚点配置与包内不一致时同步，不整份覆盖。
+
+## English
+
+- **1.1.62**.
+- Continue/retry is on again.
+- Anchor gate: bootstrap cap 8192, max 2 steps; promote after the first tool call.
+- Existing presets sync the anchor-gate block when it differs from the package.
+
+# 1.1.61
+
+## 中文
+
+- 版本 **1.1.61**。
+- **多宿主 Apply**：npm-global 与桌面 `resources/app` 一并补丁（#72 类路径问题）。
+- **#73**：代理 / IP / DNS 等 benign 话题不再误触攻击闸门（`net-scope.js`）。
+- **#74**：自定义提示词持久化——`resolveInjectText` 读 `prompt-inject.md`，UI 保存走 `saveOverrideContent`，启动 `ensureOperatorBody`。
+- **极简**：#80 保持官方 persistent-shell；UI 选 minimal 以 `agent-preset/selected` 为准（不再被会话头 `standard` 误导）；`adaptInjectForMinimalPreset` 对齐 shell-only 工具表。
+- **拒答续跑**：`refusal-recover` 识别「我不做 / 不参与」等句式。
+- 注入链：`injectMatchers` 防重复段；默认提示词重加密进 `asset-table.js`。
+
+## English
+
+- **1.1.61**.
+- **Multi-host Apply**: patch npm-global and desktop `resources/app` together.
+- **#73**: Benign proxy/IP/DNS topics no longer trip the attack gate.
+- **#74**: Custom prompt persists via `prompt-inject.md` + `saveOverrideContent`.
+- **Minimal**: #80 official shell-only preset; preset from `agent-preset/selected`; runtime `adaptInjectForMinimalPreset`.
+- **Refusal recover**: broader Chinese refusal phrasing.
+- Inject assembly dedupe; default prompt re-sealed.
+
 # 1.1.60
 
 ## 中文
