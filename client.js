@@ -188,6 +188,7 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"table.patch": "项目",
 			"table.status": "状态",
 			"status.applied": "已应用",
+			"status.off": "已关闭",
 			"status.pending": "待应用",
 			"status.unmatched": "没对上",
 			"status.skipped": "跳过",
@@ -199,7 +200,7 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"warn.noInject": "官方始终用默认提示词。红队开了规则集就只用规则集；没开时用去掉 CTF 的默认提示词，再接红队操作。两边都空会提示必须添加。",
 			"need.prompt": "提示词和规则集都是空的，必须先添加提示词，或启用一条有内容的规则集。",
 			"btn.restoreInject": "恢复默认",
-			"saved.restoreInject": "已填入默认提示词，点保存写入",
+			"saved.restoreInject": "已恢复默认提示词",
 			"skip": "跳过",
 			"unknown": "未知",
 			"delete": "删除",
@@ -416,6 +417,10 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"rewind.once.hint": "把这一轮发出去的那句放回输入框，并清掉这一轮",
 			"rewind.round": "回退上一轮",
 			"rewind.round.hint": "把这一轮发出去的那句放回输入框；子代理也只撤这一轮",
+			"hooksDeny.title": "Hooks 拦截",
+			"hooksDeny.bypass": "放行 hooks 的 deny / ask（补丁 30 / 31 / 64 / 65）",
+			"hooksDeny.hint": "关掉后，用户自己的 PreToolUse / UserPromptSubmit / Stop hook 的 deny 会按官方逻辑生效。官方 ask 分支本身是空操作，关开关不会弹出审批框。改完后点「应用」并重启才写进宿主。",
+			"saved.hooksDeny": "已保存",
 			"continue.title": "失败重试 / 继续",
 			"continue.hint": "请求失败会自动重试；异常停止或中断可点「继续」或自动续跑。自己点停止不会自动继续。次数用完后需新开一轮。",
 			"continue.autoRetry": "失败自动重试",
@@ -500,6 +505,7 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"table.patch": "Item",
 			"table.status": "Status",
 			"status.applied": "Applied",
+			"status.off": "Off",
 			"status.pending": "Pending",
 			"status.unmatched": "No match",
 			"status.skipped": "Skipped",
@@ -511,7 +517,7 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"warn.noInject": "Official mode always uses the default prompt. Red team uses only the active rule set; otherwise it uses the default prompt without the CTF section, then the red team steps. If both are empty you will be asked to add a prompt.",
 			"need.prompt": "Both the prompt and the rule set are empty. Add a prompt, or enable a rule that has content.",
 			"btn.restoreInject": "Reset default",
-			"saved.restoreInject": "Default prompt loaded. Save to write.",
+			"saved.restoreInject": "Default prompt restored",
 			"skip": "Skipped",
 			"unknown": "Unknown",
 			"delete": "Delete",
@@ -728,6 +734,10 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"rewind.once.hint": "Put this round's message back in the box and drop only this round",
 			"rewind.round": "Undo last round",
 			"rewind.round.hint": "Put this round's message back in the box; subagents drop only this round",
+			"hooksDeny.title": "Hook interception",
+			"hooksDeny.bypass": "Bypass hook deny / ask (patches 30 / 31 / 64 / 65)",
+			"hooksDeny.hint": "When off, your own PreToolUse / UserPromptSubmit / Stop hook deny runs as the official host wrote it. The official ask branch is a no-op; turning this off will not show an approval dialog. Click Apply and restart to write the host files.",
+			"saved.hooksDeny": "Saved",
 			"continue.title": "Retry / Continue",
 			"continue.hint": "Failed requests auto-retry. After an abnormal stop or interrupt, use Continue or auto-resume. A manual stop never auto-continues. Counts reset after a completed turn.",
 			"continue.autoRetry": "Auto-retry on failure",
@@ -973,12 +983,13 @@ body:not([data-ds-dark-theme]) .dshp-auth-ops button.primary{background:var(--ds
 			if (st === "pending") return "wait";
 			if (st === "unmatched") return "bad";
 			if (st === "na") return "ok";
-			if (st === "missing_file" || st === "skipped" || st === "unlocated") return "miss";
+			if (st === "missing_file" || st === "skipped" || st === "unlocated" || st === "off") return "miss";
 			return "bad";
 		}
 
 		function statusLabel(st, t) {
 			if (st === "applied" || st === "already") return t("status.applied");
+			if (st === "off") return t("status.skipped");
 			if (st === "pending") return t("status.pending");
 			if (st === "unmatched") return t("status.unmatched");
 			if (st === "skipped") return t("status.skipped");
@@ -1094,6 +1105,61 @@ body:not([data-ds-dark-theme]) .dshp-auth-ops button.primary{background:var(--ds
 					) : null,
 				);
 			});
+		}
+
+		function HooksDenySection({ onSaved }) {
+			const t = useT();
+			const [cfg, setCfg] = useState(null);
+			const [notice, setNotice] = useState({ kind: "idle", text: "" });
+			const [busy, setBusy] = useState(false);
+
+			useEffect(() => {
+				apiJson("/dsh-purge/hooks-deny")
+					.then((d) => { if (d && d.ok) setCfg({ hooksDenyBypass: d.hooksDenyBypass !== false }); })
+					.catch(() => {});
+			}, []);
+
+			const save = (hooksDenyBypass) => {
+				if (!cfg || busy) return;
+				setCfg({ hooksDenyBypass });
+				setBusy(true);
+				apiJson("/dsh-purge/hooks-deny", {
+					method: "POST",
+					headers: { "content-type": "application/json" },
+					body: JSON.stringify({ hooksDenyBypass }),
+				})
+					.then((d) => {
+						if (d && d.ok) {
+							setCfg({ hooksDenyBypass: d.hooksDenyBypass === true });
+							setNotice({ kind: "ok", text: t("saved.hooksDeny") });
+							if (typeof onSaved === "function") onSaved();
+						} else {
+							setNotice({ kind: "error", text: t("err.save", { error: (d && d.error) || "" }) });
+						}
+					})
+					.catch((e) => setNotice({ kind: "error", text: t("err.save", { error: e.message }) }))
+					.finally(() => setBusy(false));
+			};
+
+			if (!cfg) return null;
+			return h("div", { className: "dshp-cr", style: { marginTop: 12 } },
+				h("div", { className: "dshp-sub" },
+					h("h4", null, t("hooksDeny.title")),
+					noticeNode(notice),
+				),
+				h("p", { className: "dshp-hint", style: { margin: "0 0 4px", color: "var(--dshp-mute)", fontSize: 12 } }, t("hooksDeny.hint")),
+				h("div", { className: "dshp-cr-row" },
+					h("label", null,
+						h("input", {
+							type: "checkbox",
+							checked: cfg.hooksDenyBypass === true,
+							disabled: busy,
+							onChange: (e) => save(e.target.checked),
+						}),
+						t("hooksDeny.bypass"),
+					),
+				),
+			);
 		}
 
 		function ContinueRetrySection() {
@@ -1597,9 +1663,36 @@ body:not([data-ds-dark-theme]) .dshp-auth-ops button.primary{background:var(--ds
 
 			const restoreOverride = useCallback(() => {
 				if (!defaultOverride) return;
+				const tr = t;
+				const ticket = ++actionTicket.current;
 				overrideRef.current = defaultOverride;
 				setOverride(defaultOverride);
-				setNotice({ kind: "ok", text: t("saved.restoreInject") });
+				setPatchBusy(true);
+				setNotice({ kind: "idle", text: "" });
+				apiJson("/dsh-purge/override", {
+					method: "POST",
+					headers: { "content-type": "application/json" },
+					body: JSON.stringify({ content: defaultOverride }),
+				})
+					.then((d) => {
+						if (ticket !== actionTicket.current) return;
+						if (!d || !d.ok) {
+							setNotice({ kind: "error", text: tr("err.save", { error: (d && d.error) || "" }) });
+							return;
+						}
+						if (typeof d.content === "string") {
+							overrideRef.current = d.content;
+							setOverride(d.content);
+						}
+						setNotice({ kind: "ok", text: tr("saved.restoreInject") });
+					})
+					.catch((e) => {
+						if (ticket !== actionTicket.current) return;
+						setNotice({ kind: "error", text: tr("err.save", { error: e.message }) });
+					})
+					.finally(() => {
+						if (ticket === actionTicket.current) setPatchBusy(false);
+					});
 			}, [defaultOverride, t]);
 
 			const waitHostAfterUninstall = useCallback((tr) => {
@@ -1747,6 +1840,7 @@ body:not([data-ds-dark-theme]) .dshp-auth-ops button.primary{background:var(--ds
 					),
 					h("div", { className: "dshp-editions" },
 						renderEdition("stable"),
+						renderEdition("beta"),
 					),
 					noticeNode(updateNotice),
 				),
@@ -1776,6 +1870,7 @@ body:not([data-ds-dark-theme]) .dshp-auth-ops button.primary{background:var(--ds
 				),
 				h("div", { className: "dshp-bar", "aria-hidden": "true" }, h("i", { style: { width: pct + "%" } })),
 				h(PatchGroups, { state: s }),
+				h(HooksDenySection, { onSaved: loadAll }),
 				h("div", { className: "dshp-row", style: { marginTop: 14 } },
 					h(Btn, { kind: "primary", disabled: patchBusy || uninstallBusy || !overrideLoaded, onClick: () => doAction("apply", "action.apply") }, patchBusy ? t("btn.apply.busy") : t("btn.apply")),
 					h(Btn, { kind: "danger", disabled: patchBusy || uninstallBusy, onClick: () => doAction("revert", "action.revert") }, t("btn.revert")),
@@ -2134,7 +2229,8 @@ body:not([data-ds-dark-theme]) .dshp-auth-ops button.primary{background:var(--ds
 		function keepListedVersion(item, _ceiling) {
 			const ver = String((item && (item.version || item.ref || item.id)) || "");
 			if (!item) return false;
-			if (item.channel === "beta" || item.ref === "beta") return false;
+			if (item.ref === "beta" || item.id === "beta") return true;
+			if (item.channel === "beta") return false;
 			if (/(?:^|[-._])(beta|rc|pre|preview|test)(?:\d|$|[-._])/i.test(ver)) return false;
 			return true;
 		}
@@ -3771,7 +3867,23 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 .rt-kb-tpl-name{flex:1 1 auto;min-width:0;color:var(--dsw-alias-label-secondary);overflow-wrap:anywhere}
 .rt-md{flex:1;overflow:auto;margin:0;padding:14px 16px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;
   line-height:1.65;white-space:pre-wrap;word-break:break-word;background:var(--dsw-alias-bg-base)}
-.rt-weblink{display:block;font-size:11.5px;margin-top:1px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}`    /* ---------------------------------------------------------- 桥接与状态 */
+.rt-weblink{display:block;font-size:11.5px;margin-top:1px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rt-shots{margin:8px 0 4px;padding:7px 8px;border:1px solid var(--dsw-alias-border-l1);border-radius:7px;
+  background:var(--dsw-alias-bg-layer-1)}
+.rt-shots-head{display:flex;align-items:baseline;gap:8px;font-size:11.5px;margin-bottom:6px}
+.rt-shots-n{color:var(--dsw-alias-label-secondary)}
+.rt-shot-row{display:flex;gap:8px;flex-wrap:wrap}
+.rt-shot{display:flex;flex-direction:column;gap:3px;max-width:220px}
+.rt-shot-thumb{border:1px solid var(--dsw-alias-border-l1);border-radius:5px;background:#0b1020;
+  object-fit:contain;display:block;width:auto;max-width:216px}
+.rt-shot-loading{display:flex;align-items:center;justify-content:center;width:150px;font-size:11px;
+  color:var(--dsw-alias-label-secondary)}
+.rt-shot-cap{display:flex;align-items:center;gap:5px;font-size:10.5px;overflow-wrap:anywhere}
+.rt-shot-label{color:var(--dsw-alias-label-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px}
+.rt-shot-zoom{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.82);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;cursor:zoom-out;padding:18px}
+.rt-shot-zoom img{max-width:96vw;max-height:86vh;border-radius:6px;box-shadow:0 18px 48px rgba(0,0,0,.5)}
+.rt-shot-zoom-cap{color:#e5e7eb;font-size:12px;text-align:center;max-width:90vw;overflow-wrap:anywhere}`    /* ---------------------------------------------------------- 桥接与状态 */
     /** 是否在「全面浏览」独立窗口里（URL hash 标记，复用同一套界面代码）。 */
     const isFullWindow = () => {
       try { return String(window.location.hash || '') === '#redteam-full' } catch { return false }
@@ -3822,6 +3934,61 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
     }
 
     const fmt = (s) => (s ? String(s).replace('T', ' ').slice(0, 16) : '—')
+    const shotCache = new Map()
+    const shotLoading = new Map()
+    const shotSrc = (eng, id) => shotCache.get(eng + ':' + id) || null
+    const loadShot = (eng, id) => {
+      const key = eng + ':' + id
+      if (shotCache.has(key) || shotLoading.has(key)) return
+      const p = api({ op: 'shotData', engagement: eng, id: id }).then((r) => {
+        shotCache.set(key, r && r.base64 ? 'data:' + (r.mime || 'image/png') + ';base64,' + r.base64 : '')
+        shotLoading.delete(key)
+        const snap = Object.assign({}, ui)
+        for (const f of Array.from(subs)) {
+          try { f(snap) } catch { /* ignore subscriber errors */ }
+        }
+      }).catch(() => { shotLoading.delete(key) })
+      shotLoading.set(key, p)
+    }
+    const SHOT_KIND = { screenshot: '现场截图', card: '记录生成的证据摘录' }
+    const ShotImage = ({ eng, shot, height }) => {
+      const [zoom, setZoom] = React.useState(false)
+      const src = shotSrc(eng, shot.id)
+      if (src === null) { loadShot(eng, shot.id); }
+      const card = shot.kind === 'card'
+      return h('div', { className: 'rt-shot' },
+        src === null
+          ? h('div', { className: 'rt-shot-thumb rt-shot-loading', style: { height: (height || 96) + 'px' } }, '载入中…')
+          : h('img', {
+              className: 'rt-shot-thumb', src: src, alt: shot.label || ('证据 ' + shot.id),
+              style: { height: (height || 96) + 'px', cursor: 'zoom-in' },
+              onClick: () => setZoom(true),
+            }),
+        h('div', { className: 'rt-shot-cap' },
+          h('span', { className: 'rt-tag ' + (card ? 'rt-tag-warn' : 'rt-tag-live'), title: card
+            ? '由当日记录生成的证据摘录，不是现场截图 —— 报告里同样会标注'
+            : '现场截图' }, SHOT_KIND[shot.kind] || shot.kind || '证据'),
+          h('span', { className: 'rt-shot-label', title: shot.label || shot.note || '' },
+            shot.label || shot.target || ('#' + shot.id))),
+        zoom
+          ? h('div', { className: 'rt-shot-zoom', onClick: () => setZoom(false) },
+              h('img', { src: src, alt: shot.label || '' }),
+              h('div', { className: 'rt-shot-zoom-cap' }, (shot.label || shot.target || '')
+                + (card ? '　·　由当日记录生成（非现场截图）' : '')
+                + (shot.captured_at ? '　·　' + fmt(shot.captured_at) : '')
+                + '　·　点击任意处关闭'))
+          : null)
+    }
+    const ShotStrip = ({ eng, shots, total, title }) => {
+      const list = shots || []
+      if (list.length === 0) return null
+      return h('div', { className: 'rt-shots' },
+        h('div', { className: 'rt-shots-head' },
+          h('b', null, title || '证据截图'),
+          h('span', { className: 'rt-shots-n' }, '显示 ' + list.length + ' 张'
+            + (total && total > list.length ? '（该得分点共 ' + total + ' 张，取代表图）' : ''))),
+        h('div', { className: 'rt-shot-row' }, list.map((sh) => h(ShotImage, { key: 'sh' + sh.id, eng: eng, shot: sh }))))
+    }
     /** 发现时间在列表里只留「月-日 时:分」：整行宽度紧张，完整时间进悬浮提示 */
     const fmtShort = (s) => {
       const t = String(s || '').replace('T', ' ')
@@ -4514,7 +4681,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
               className: 'rt-avail rt-avail-' + (s.availability || 'unknown'),
               style: { marginLeft: 6 },
               title: (s.availability === 'available'
-                ? '可用：正文能加载，必需的环境变量/本机路径/基础设施都在'
+                ? '可用：技能正文可以加载。缺的外部工具或密钥记在详情里，不阻止调用。'
                 : (s.problems || []).join('\n') || '未知'),
             }, s.availability === 'available' ? '可用' : s.availability === 'broken' ? '不可用' : '未知'),
         h('div', { className: 'rt-item-desc' }, s.description || '（无描述）'),
@@ -4598,7 +4765,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
                       h('span', { className: 'rt-avail rt-avail-' + avail },
                         avail === 'available' ? '可用' : avail === 'broken' ? '不可用（有明确缺口）' : '未知（正文读不到）')),
                     (s2.problems || []).length > 0
-                      ? h('div', { className: 'rt-kv' }, h('b', null, '缺口'),
+                      ? h('div', { className: 'rt-kv' }, h('b', null, avail === 'available' ? '未装上的外部工具' : '缺口'),
                           h('span', null, s2.problems.map((x, i) => h('div', { key: 'p' + i }, '· ' + x))))
                       : null,
                     (s2.needs_user || []).length > 0
@@ -5278,15 +5445,16 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
           h('span', null, String(x.evidence).replace(/\n+/g, ' '))) : null,
         x.recorded_at ? h('div', { className: 'rt-rep-meta' }, h('b', null, '取得时间 '),
           h('span', null, fmt(x.recorded_at) + (x.recorded_by ? '（' + (ROLE_LABEL[x.recorded_by] || x.recorded_by) + '）' : ''))) : null,
-        /* ── 这一步怎么来的：动作步骤（含实际命令与回显）+ 凭据 + 隧道 + WebShell ─────
+        h(ShotStrip, { eng: eng, shots: x.shots, total: x.shot_total, title: '证据截图' }),
+        /* ── 复现步骤：动作记录（含实际命令与回显）+ 凭据 + 隧道 + WebShell ─────
            报告的交付价值全在这块：账号密码怎么来的、隧道怎么搭的，用户照着就能复现。 */
         h('details', { className: 'rt-rep-trace', open: x.incomplete === true || (x.steps || []).length === 0 },
           h('summary', { className: 'rt-rep-trace-head', style: { cursor: 'pointer' } },
-            h('span', { className: 'rt-rep-trace-title' }, '这一步怎么来的（点击展开复现链）'),
+            h('span', { className: 'rt-rep-trace-title' }, '复现步骤（点击展开）'),
             (x.steps || []).length ? h('span', { className: 'rt-tag' }, (x.steps || []).length + ' 个动作') : null,
             (x.credentials || []).length ? h('span', { className: 'rt-tag' }, (x.credentials || []).length + ' 条凭据') : null,
             (x.tunnels || []).length ? h('span', { className: 'rt-tag' }, (x.tunnels || []).length + ' 条隧道') : null,
-            x.incomplete ? h('span', { className: 'rt-tag rt-tag-warn' }, '复现链不完整') : h('span', { className: 'rt-tag rt-tag-live' }, '可复现')),
+            x.incomplete ? h('span', { className: 'rt-tag rt-tag-warn' }, '复现材料待补') : h('span', { className: 'rt-tag rt-tag-live' }, '可复现')),
           h('div', { style: { paddingTop: 6 } },
           x.how ? h('div', { className: 'rt-rep-trace-how' }, x.how) : null,
           (x.steps || []).length === 0
@@ -6112,6 +6280,8 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
             className: 'rt-tag rt-tag-warn',
             title: hh.capped_reason || '同一资产同一端口只算分值最高的一条，这条不计分',
           }, '服务已拿满 · 不计分' + (hh.service ? '（' + hh.service + '）' : '')) : null,
+          hh.shot_count ? h('span', { className: 'rt-tag', title: '这条命中有证据截图（展开得分点即可看到代表图）' },
+            '图 ' + hh.shot_count) : null,
           h('span', { className: 'rt-hit-time' }, fmt(hh.recorded_at)),
           h('button', {
             className: 'rt-btn', style: { padding: '0 5px', fontSize: 10.5 },
@@ -6139,6 +6309,8 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
             : null,
           p.hits.length
             ? h('div', null,
+                h(ShotStrip, { eng: eng, shots: p.shots, total: p.shot_total,
+                  title: '证据截图 · ' + (p.shot_total || (p.shots || []).length) + ' 张' }),
                 h('div', { className: 'rt-section', style: { padding: '6px 0 0' } },
                   '命中记录 · ' + p.hits.length + '（只记资产与账号密码，详细复现见报告）'),
                 h('div', { className: 'rt-hits' }, hitNodes))

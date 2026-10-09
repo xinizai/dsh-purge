@@ -1,3 +1,43 @@
+# 1.1.66
+
+## 中文
+
+- 版本 **1.1.66**。
+- **#80**：清洗页可关掉 hooks deny / ask 旁路。关掉且文件干净显示跳过，不计入已应用；关掉后再打开，64/65 会按官方形态再打一次。
+- **#81**：继续 / 拒答续跑的来源 kind 改为 `dsh-purge`；限流和传输失败不再自动续一轮。
+- 重启后不用点保存也会挂上默认提示词；每一轮都补回全文。空的应用请求不再清空磁盘上的提示词。
+- 声明过的 overlay 只剩 `.dshpurge.bak` 时，应用会先拷回再加载。
+- 红队报告补上得分点短名。中文 README 恢复题图和预览图。
+
+## English
+
+- **1.1.66**.
+- **#80**: The clean page can turn off the hooks deny/ask bypass. Off + clean files show skipped and are not counted as applied. Turning it back on reapplies 64/65 from the official form.
+- **#81**: Continue / refusal-recover use source kind `dsh-purge`. RATE_LIMIT and TRANSPORT no longer start another continue turn.
+- Restart hangs the default prompt without a Save click; every step puts the full text back. An empty Apply body no longer wipes the disk prompt.
+- A declared overlay that exists only as `.dshpurge.bak` is copied back before load.
+- Red-team reports get short score-point names. Chinese README restores the banner and preview images.
+
+# 1.1.65
+
+## 中文
+
+- 版本 **1.1.65**。
+- 默认提示词按 `lib/default-prompt-inject.md` 重新加密进槽。磁盘上仍是用户自己改过的稿时，不覆盖。
+- 红队接入截图登记、得分点看图，以及报告六段。可把某次演练导出成目录。
+- 技能正文缺工具路径、缺密钥或 VPS 还是占位符时，不再把整条技能标成不可用。缺口留在详情里。
+- 打开页面或组装提示词时，会把当前默认稿同步到磁盘，不必先点保存。
+- 删掉没有调用的桌面启动封装、旧迁移脚本，以及已经注释掉的手动继续入口。
+
+## English
+
+- **1.1.65**.
+- The default prompt is sealed again from `lib/default-prompt-inject.md`. A prompt the user already edited on disk is left as-is.
+- Red team gains shot registration, score-point images, and the six-part report. An engagement can be exported to a folder.
+- A skill stays usable when a documented tool path, key, or VPS placeholder is missing. The gap stays on the skill detail.
+- Opening the page or assembling the prompt writes the current default to disk, without a Save click first.
+- Unused desktop launch helpers, the old migration script, and the commented manual-continue entry are removed.
+
 # 1.1.64
 
 ## 中文
